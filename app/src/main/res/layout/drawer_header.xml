@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/primaryLightColor"
+    android:padding="16dp"
+    android:gravity="center_horizontal">
+
+    <!-- Profile Picture with Update Button -->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <!-- Profile Picture -->
+        <ImageView
+            android:id="@+id/drawerProfilePic"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/profileblack"
+            android:contentDescription="Profile Picture"
+            android:layout_gravity="center"
+            android:background="@drawable/edittext_background"
+            android:padding="8dp"
+            android:onClick="fetchProfileData" /> <!-- OnClick triggers Firebase data fetch -->
+
+        <!-- Upload Icon -->
+        <ImageView
+            android:id="@+id/uploadProfilePicIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignEnd="@id/drawerProfilePic"
+            android:layout_alignBottom="@id/drawerProfilePic"
+            android:background="@drawable/roundbg"
+            android:clickable="true"
+            android:contentDescription="Upload Profile Picture Icon"
+            android:onClick="openImagePicker"
+            android:padding="4dp"
+            android:src="@android:color/transparent"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </RelativeLayout>
+
+    <!-- Name -->
+    <TextView
+        android:id="@+id/drawerUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="Hey, User!"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Email -->
+    <TextView
+        android:id="@+id/drawerUserEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="user@example.com"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+    <!-- Contact -->
+    <TextView
+        android:id="@+id/drawerUserContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/_91_mobile_number"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+    <!-- Update Profile Button -->
+    <Button
+        android:id="@+id/updateProfileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Profile"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@android:color/white"
+        android:textColor="@color/primaryLightColor"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:onClick="showEditProfileFields" />
+
+</LinearLayout>

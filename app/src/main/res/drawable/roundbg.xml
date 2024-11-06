@@ -1,0 +1,32 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Shadow Layer -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="300dp" /> <!-- For a circular shape -->
+            <solid android:color="#66000000" /> <!-- Shadow color -->
+        </shape>
+    </item>
+
+    <!-- Main White Background -->
+    <item android:left="2dp" android:right="2dp" android:top="2dp" android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="300dp" /> <!-- Round shape -->
+            <solid android:color="#FFFFFF" /> <!-- White background -->
+        </shape>S
+    </item>
+
+    <!-- Border Layer -->
+    <item android:left="2dp"
+        android:right="2dp"
+        android:top="2dp"
+        android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="300dp" />
+            <stroke
+                android:width="3dp"
+                android:color="#FFFFFF" /> <!-- Border color (white) -->
+        </shape>
+    </item>
+
+</layer-list>

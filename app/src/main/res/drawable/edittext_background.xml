@@ -1,0 +1,31 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Shadow Layer -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="12dp" />
+
+ <!-- Shadow color -->
+        </shape>
+    </item>
+
+    <!-- Main Background -->
+    <item android:left="2dp" android:right="2dp" android:top="2dp" android:bottom="4dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+
+    <!-- Border Layer -->
+    <item android:left="2dp"
+        android:right="2dp"
+        android:top="2dp"
+        android:bottom="4dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="12dp" />
+            <stroke
+                android:width="3dp"
+                android:color="#FFD6CF" /> <!-- Border color -->
+        </shape>
+    </item>
+</layer-list>

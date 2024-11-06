@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "517202914968",
+    "firebase_url": "https://saiseva-tours-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "saiseva-tours",
+    "storage_bucket": "saiseva-tours.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517202914968:android:fc9733df42f5ac2ff36aed",
+        "android_client_info": {
+          "package_name": "com.example.saisevatourstravels"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517202914968-80sm87jl0kjtlfm9j43esibbtpds9kc0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.saisevatourstravels",
+            "certificate_hash": "27279d67061aeee981d979cfd123807235d783d3"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4Ga3qRdQT5t09N1cYV1ja4Zctm6kOuO8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

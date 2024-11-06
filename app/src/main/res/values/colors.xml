@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="colour_nameofapp">#F4754C</color>
+        <!-- Light Theme Colors -->
+        <color name="purple_500">#6200EE</color>
+        <color name="purple_700">#3700B3</color>
+        <color name="purple_200">#BB86FC</color>
+
+        <color name="teal_200">#03DAC5</color>
+        <color name="teal_700">#018786</color>
+
+        <color name="background_light">#F5F5F5</color>
+        <color name="text_primary_light">#212121</color>
+        <color name="text_secondary_light">#757575</color>
+
+        <color name="button_light">#1E88E5</color>
+        <color name="button_text_light">#FFFFFF</color>
+        <color name="edit_text_color">#FFD6CF</color>
+
+
+        <!-- Dark Theme Colors -->
+        <color name="background_dark">#121212</color>
+        <color name="text_primary_dark">#FFFFFF</color>
+        <color name="text_secondary_dark">#BDBDBD</color>
+
+        <color name="button_dark">#90CAF9</color>
+        <color name="button_text_dark">#000000</color>
+
+    <color name="primaryColor">#FF5722</color>
+    <color name="primaryLightColor">#FF8A50</color>
+    <color name="secondaryColor">#03A9F4</color>
+    <color name="textColor">#000000</color>
+
+
+</resources>

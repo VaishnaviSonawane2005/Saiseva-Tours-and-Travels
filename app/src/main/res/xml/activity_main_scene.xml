@@ -1,0 +1,60 @@
+<MotionScene
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="2000"
+    motion:autoTransition="animateToEnd"
+    motion:motionInterpolator="easeInOutQuad">
+
+    <KeyFrameSet>
+        <KeyAttribute
+            motion:motionTarget="@id/logo_image"
+            motion:framePosition="50"
+            motion:attributeName="rotation"
+            android:value="360" />
+    </KeyFrameSet>
+</Transition>
+
+<ConstraintSet android:id="@+id/start">
+<Constraint
+    android:id="@+id/logo_image"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    motion:layout_constraintTop_toTopOf="parent"
+    motion:layout_constraintBottom_toBottomOf="parent"
+    motion:layout_constraintStart_toStartOf="parent"
+    motion:layout_constraintEnd_toEndOf="parent"
+    motion:layout_constraintVertical_bias="0.5"
+    motion:layout_constraintHorizontal_bias="0.5" />
+    <Constraint
+        android:id="@+id/saiseva_logo_dynamic"
+        motion:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="116dp"
+        android:layout_height="248dp"
+        motion:layout_constraintBottom_toBottomOf="parent"
+        motion:layout_constraintTop_toTopOf="parent"
+        motion:layout_constraintStart_toStartOf="parent"
+        motion:layout_constraintDimensionRatio="16:9"
+        motion:transitionEasing="cubic(0.11,0.89,0.93,0.32)" />
+</ConstraintSet>
+
+<ConstraintSet android:id="@+id/end">
+<Constraint
+    android:id="@+id/logo_image"
+    android:layout_width="250dp"
+    android:layout_height="250dp"
+    motion:layout_constraintTop_toTopOf="parent"
+    motion:layout_constraintBottom_toBottomOf="parent"
+    motion:layout_constraintStart_toStartOf="parent"
+    motion:layout_constraintEnd_toEndOf="parent"
+    motion:layout_constraintVertical_bias="0.5"
+    motion:layout_constraintHorizontal_bias="0.5" />
+</ConstraintSet>
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end"
+        motion:autoTransition="animateToStart" />
+</MotionScene>

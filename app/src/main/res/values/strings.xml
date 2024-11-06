@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Saiseva Tours and Travels</string>
+    <!-- Strings related to login -->
+    <string name="Saiseva">Saiseva\n</string>
+    <string name="Greet...">Get started with Saiseva</string>
+    <string name="start">Continue</string>
+
+    <string name="_91_mobile_number"> +91 | Mobile number</string>
+    <string name="or_text">----------Or----------</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="verify_otp">Verify OTP</string>
+    <string name="time_s_up_tap_here_to_resend_otp">Time\'s up! Tap here to resend OTP.</string>
+    <string name="title_activity_otpverification">OTPVerification</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="default_web_client_id">your-client-id.apps.googleusercontent.com</string>
+    <string name="create_account">Create Account</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sign_in">Sign in</string>
+    <string name="admob_app_id">YOUR_ADMOB_APP_ID</string>
+    <string name="already_have_an_accout_login">Already have an accout? Login👉</string>
+
+
+</resources>

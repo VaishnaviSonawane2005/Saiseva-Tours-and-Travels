@@ -1,0 +1,98 @@
+[versions]
+agp = "8.5.2"
+androidxNavigationFragmentKtxVersion = "2.7.4"
+androidxRecyclerview = "1.3.1"
+comGoogleAndroidGmsPlayServicesAuth6 = "20.6.0"
+comGoogleAndroidGmsPlayServicesLocation7 = "21.0.1"
+comGoogleAndroidGmsPlayServicesMaps4 = "18.1.0"
+firebaseBomVersion = "32.3.1"
+googleMaterial = "1.9.0"
+implementation = 'com.google.android.material:material:1.9.0'
+
+annotationVersion = "1.6.0"
+play.services.auth = "20.8.0" # Or the latest version available
+
+firebaseAuth = "23.1.0"
+firebaseAuthVersion = "21.1.0"
+firebaseBom = "33.5.1"
+googlePlayServicesAuth = "20.2.0"
+kotlin = "1.9.0"
+coreKtx = "1.13.1"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+material = "1.12.0"
+activity = "1.9.3"
+constraintlayout = "2.1.4"
+playServicesAuth = "21.2.0"
+playServicesAuthVersion = "19.2.0"
+squareupPicassoVersion = "2.8"
+supportAnnotations = "28.0.0"
+firebaseAuthKtx = "23.1.0"
+firebaseCrashlytics = "19.2.1"
+googleGmsGoogleServices = "4.4.2"
+googleFirebaseCrashlytics = "3.0.2"
+firebaseDatabaseKtx = "21.0.0"
+annotation = "1.9.0"
+lifecycleLivedataKtx = "2.8.6"
+lifecycleViewmodelKtx = "2.8.6"
+junitJunit = "4.12"
+firebaseMessaging = "24.0.3"
+viewpager2Version = "1.1.0"
+firebaseStorageKtx = "21.0.1"
+firebaseDatabase = "21.0.0"
+
+[libraries]
+
+androidx-annotation-v160 = { module = "androidx.annotation:annotation", version.ref = "annotationVersion" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.15.0" }
+androidx-navigation-navigation-fragment-ktx2 = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidxNavigationFragmentKtxVersion" }
+androidx-navigation-navigation-ui-ktx17 = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidxNavigationFragmentKtxVersion" }
+androidx-recyclerview-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidxRecyclerview" }
+com-google-android-gms-play-services-auth-v2060-x4 = { module = "com.google.android.gms:play-services-auth", version.ref = "comGoogleAndroidGmsPlayServicesAuth6" }
+com-google-android-gms-play-services-location8 = { module = "com.google.android.gms:play-services-location", version.ref = "comGoogleAndroidGmsPlayServicesLocation7" }
+com-google-android-gms-play-services-maps5 = { module = "com.google.android.gms:play-services-maps", version.ref = "comGoogleAndroidGmsPlayServicesMaps4" }
+com-google-firebase-firebase-analytics3 = { module = "com.google.firebase:firebase-analytics" }
+com-google-firebase-firebase-auth = { module = "com.google.firebase:firebase-auth" }
+com-google-firebase-firebase-auth-ktx2 = { module = "com.google.firebase:firebase-auth-ktx" }
+com-google-firebase-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+com-google-firebase-firebase-database-ktx4 = { module = "com.google.firebase:firebase-database-ktx" }
+com-google-firebase-firebase-messaging5 = { module = "com.google.firebase:firebase-messaging" }
+com-squareup-picasso-picasso = { module = "com.squareup.picasso:picasso", version.ref = "squareupPicassoVersion" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics", version = "22.1.2" }
+firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
+firebase-auth-v2110 = { module = "com.google.firebase:firebase-auth", version = "23.1.0" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-bom-v3231 = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
+google-firebase-auth = { module = "com.google.firebase:firebase-auth" }
+google-material-v190 = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.2.0" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-auth-v1920 = { module = "com.google.android.gms:play-services-auth", version = "21.2.0" }
+play-services-auth-v2020 = { module = "com.google.android.gms:play-services-auth", version.ref = "googlePlayServicesAuth" }
+support-annotations = { group = "com.android.support", name = "support-annotations", version.ref = "supportAnnotations" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
+firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version = "1.9.1" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version = "2.8.7" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "2.8.7" }
+junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
+viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2Version" }
+firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
+
