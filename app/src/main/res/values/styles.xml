@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Custom Style for ShapeableImageView to make it circular -->
+    <style name="CustomCircleImage">
+        <!-- Apply the corner family to make the corners rounded -->
+        <item name="cornerFamily">rounded</item>
+        <!-- Set corner size to 50% to create a circular ImageView -->
+        <item name="cornerSize">50%</item>
+        <!-- Optional: Add stroke color and width for a border effect -->
+        <item name="strokeColor">@color/primaryColor</item>
+        <item name="strokeWidth">2dp</item>
+    </style>
+</resources>

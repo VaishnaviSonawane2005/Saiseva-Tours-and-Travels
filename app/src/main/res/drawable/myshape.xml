@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Define the rectangle shape -->
-    <solid android:color="#000000" /> <!-- Background color of the shape -->
+    <solid android:color="@color/primaryLightColor" /> <!-- Background color of the shape -->
 
     <!-- Rounded corners -->
     <corners android:radius="40dp" /> <!-- Adjust the radius to change the curve -->

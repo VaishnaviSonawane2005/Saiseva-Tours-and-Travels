@@ -19,6 +19,7 @@ class BannerAdapter(private val context: Context, private val images: List<Int>)
         return BannerViewHolder(view)
     }
 
+
     override fun onBindViewHolder(holder: BannerViewHolder, position: Int) {
         // Set the image resource using the list of drawable resources
         holder.imageView.setImageResource(images[position])

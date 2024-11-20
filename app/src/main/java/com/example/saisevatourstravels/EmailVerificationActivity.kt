@@ -176,7 +176,7 @@ class EmailVerificationActivity : AppCompatActivity() {
 
     // Navigate to MainDashBoard
     private fun navigateToMainDashBoard(user: User) {
-        val intent = Intent(this, MainDashBoard::class.java)
+        val intent = Intent(this, DashboardActivity::class.java)
         intent.putExtra("userName", user.username)
         intent.putExtra("userEmail", user.email)
         intent.putExtra("userContact", user.contact)

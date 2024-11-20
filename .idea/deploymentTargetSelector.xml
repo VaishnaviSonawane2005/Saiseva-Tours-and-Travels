@@ -11,19 +11,19 @@
       <SelectionState runConfigName="Saiseva_Tours_&amp;_Travels">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="MainActivity">
+      <SelectionState runConfigName="UpdateProfileActivity">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="EmailVerificationActivity">
+      <SelectionState runConfigName="CabActivity">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="BannerAdapter">
+      <SelectionState runConfigName="CabActivity (1)">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="DashboardActivity">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="MainDashBoard">
+      <SelectionState runConfigName="BookingDetails">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

@@ -44,6 +44,12 @@ android {
         viewBinding = true
         buildConfig = true
     }
+
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/gradle/incremental.annotation.processors"
+        }
+    }
 }
 
 dependencies {
@@ -65,10 +71,16 @@ dependencies {
     implementation(libs.com.google.firebase.firebase.analytics3)    // Firebase Analytics
     implementation(libs.com.google.firebase.firebase.messaging5)    // Firebase Messaging
 
+    // Firebase Storage and Firestore (aligned via BOM)
+    implementation(libs.firebase.firestore.ktx)  // Firestore
+    implementation(libs.firebase.storage.ktx)    // Firebase Storage
+
     // Google Play Services
     implementation(libs.com.google.android.gms.play.services.auth.v2060.x4)  // Play Services Auth
     implementation(libs.com.google.android.gms.play.services.location8)      // Play Services Location
     implementation(libs.com.google.android.gms.play.services.maps5)         // Play Services Maps
+
+    // Google Places API for autocomplete functionality
 
     // AndroidX Libraries
     implementation(libs.androidx.lifecycle.livedata.ktx)  // LiveData KTX
@@ -80,9 +92,7 @@ dependencies {
 
     // Picasso Library for image loading
     implementation(libs.com.squareup.picasso.picasso)
-
-    // Firebase Storage (aligned via BOM)
-    implementation(libs.firebase.storage.ktx)  // Firebase Storage KTX
+    implementation(libs.places)
 
     // Testing
     testImplementation(libs.junit)  // JUnit
@@ -90,5 +100,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)  // Espresso Core
     testImplementation("org.mockito:mockito-core:4.0.0")  // Mockito for unit testing
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")  // Coroutines dependency for Kotlin
-
+    implementation("com.google.android.material:material:1.9.0")  // Material Components
 }

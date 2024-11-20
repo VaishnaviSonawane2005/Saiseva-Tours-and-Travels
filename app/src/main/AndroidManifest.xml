@@ -1,19 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- For Android 13 (API level 33) and above -->
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_IMAGES"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_VIDEO"
+        android:required="false" /> <!-- Features required -->
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" /> <!-- Firebase authentication and storage access -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -23,23 +37,33 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SaisevaToursTravels"
         tools:targetApi="31">
+        <activity
+            android:name=".BookingDetails"
+            android:label="Booking Details"
+            android:exported="true" />
 
-        <!-- MainActivity with intent filter to launch app -->
+        <!-- Activities declaration -->
+        <activity
+            android:name=".CabActivity"
+            android:exported="true" />
+        <activity
+            android:name=".UpdateProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DrawerHeader"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- Declare DashboardActivity here -->
         <activity
             android:name=".DashboardActivity"
             android:exported="true" />
-
-        <!-- Other activities, accessible -->
         <activity
             android:name=".LoginActivity"
             android:exported="true" />
@@ -48,14 +72,12 @@
             android:exported="true" />
         <activity
             android:name=".MainDashBoard"
-            android:exported="true" />
-
-        <!-- Firebase provider -->
+            android:exported="true" /> <!-- Firebase provider activity -->
         <provider
             android:name="com.google.firebase.provider.FirebaseInitProvider"
             android:authorities="${applicationId}.firebaseinitprovider"
             android:exported="false"
             tools:replace="android:authorities" />
-
     </application>
+
 </manifest>

@@ -25,6 +25,7 @@
     <string name="sign_in">Sign in</string>
     <string name="admob_app_id">YOUR_ADMOB_APP_ID</string>
     <string name="already_have_an_accout_login">Already have an accout? Login👉</string>
+    <string name="banner_image">Banner Image</string>
 
 
 </resources>
