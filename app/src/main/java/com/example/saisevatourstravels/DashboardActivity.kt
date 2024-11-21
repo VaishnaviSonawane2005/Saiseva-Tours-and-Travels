@@ -27,6 +27,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var locationManager: LocationManager
     private lateinit var carRentals: ImageView
+    private lateinit var ourPackages: ImageView
 
     // Constants
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
@@ -62,6 +63,7 @@ class DashboardActivity : AppCompatActivity() {
         bannerCarousel = findViewById(R.id.viewPager)
         bottomNav = findViewById(R.id.bottomNav)
         carRentals = findViewById(R.id.carRentals) // Initialize carRentals TextView
+        ourPackages = findViewById(R.id.ourPackages)
 
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
     }
@@ -95,6 +97,11 @@ class DashboardActivity : AppCompatActivity() {
             } else {
                 requestLocationPermission()
             }
+        }
+
+        ourPackages.setOnClickListener {
+            val intent = Intent(this, OurServices::class.java)
+            startActivity(intent)
         }
 
         // Navigate to CabActivity when carRentals is clicked

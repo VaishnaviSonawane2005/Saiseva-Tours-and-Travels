@@ -38,11 +38,42 @@
         android:theme="@style/Theme.SaisevaToursTravels"
         tools:targetApi="31">
         <activity
+            android:name=".AboutUs"
+            android:exported="false" />
+        <activity
+            android:name=".aungannath"
+            android:exported="false" />
+        <activity
+            android:name=".VaniSaptashrungi"
+            android:exported="false" />
+        <activity
+            android:name=".ParaliVaijinath"
+            android:exported="false" />
+        <activity
+            android:name=".OurServices"
+            android:exported="false" />
+        <activity
+            android:name=".Nashik"
+            android:exported="false" />
+        <activity
+            android:name=".Lonavala"
+            android:exported="false" />
+        <activity
+            android:name=".Mahabaleshwar"
+            android:exported="false" />
+        <activity
+            android:name=".Goa"
+            android:exported="false" />
+        <activity
+            android:name=".ChatrapatiSambhajinagar"
+            android:exported="false" />
+        <activity
+            android:name=".Bhimashankar"
+            android:exported="false" />
+        <activity
             android:name=".BookingDetails"
-            android:label="Booking Details"
-            android:exported="true" />
-
-        <!-- Activities declaration -->
+            android:exported="true"
+            android:label="Booking Details" /> <!-- Activities declaration -->
         <activity
             android:name=".CabActivity"
             android:exported="true" />
