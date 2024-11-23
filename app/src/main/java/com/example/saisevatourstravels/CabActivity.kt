@@ -2,24 +2,19 @@ package com.example.saisevatourstravels
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Address
 import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.location.LocationManagerCompat.getCurrentLocation
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.*
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,26 +24,14 @@ class CabActivity : AppCompatActivity() {
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
 
-    // UI Elements
     private lateinit var pickupLocationEditText: EditText
     private lateinit var dropLocationEditText: EditText
-    private lateinit var dateTimeTextView: TextView
-    private lateinit var oneWayRadioButton: RadioButton
-    private lateinit var roundTripRadioButton: RadioButton
-    private lateinit var cabTypeHeaderTextView: TextView
-    private lateinit var outstationCabsTab: TextView
-    private lateinit var airportCabsTab: TextView
-    private lateinit var hourlyRentalsTab: TextView
-    private lateinit var fetchLocationButton: Button
     private lateinit var startDateTimeTextView: TextView
-    private lateinit var endDateTimeTextView: TextView
     private lateinit var saveBookingButton: Button
+    private lateinit var viewBookingsButton: Button
 
-    // Selected Options
-    private var selectedCabType: String = "Outstation Cabs" // Default cab type
-    private var selectedTripType: String = "One Way" // Default trip type
     private var startDateTime: Calendar = Calendar.getInstance()
-    private var endDateTime: Calendar = Calendar.getInstance()
+    private lateinit var database: DatabaseReference
 
     companion object {
         const val AUTOCOMPLETE_REQUEST_CODE = 100
@@ -59,91 +42,87 @@ class CabActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cab)
 
-        // Initialize Google Places API
-        if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, "YOUR_API_KEY")
-        }
-
-        // Initialize Fused Location Provider
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        database = FirebaseDatabase.getInstance().getReference("bookings")
 
-        // Initialize UI Elements
+        // Initialize UI components
         pickupLocationEditText = findViewById(R.id.pickupLocation)
         dropLocationEditText = findViewById(R.id.dropLocation)
-        dateTimeTextView = findViewById(R.id.dateTimeDisplay)
-        oneWayRadioButton = findViewById(R.id.oneWayRadioButton)
-        roundTripRadioButton = findViewById(R.id.roundTripRadioButton)
-        cabTypeHeaderTextView = findViewById(R.id.cabHeaderText)
-        outstationCabsTab = findViewById(R.id.outstationCabs)
-        airportCabsTab = findViewById(R.id.airportCabs)
-        hourlyRentalsTab = findViewById(R.id.hourlyRentals)
-        fetchLocationButton = findViewById(R.id.fetchLocationButton)
         startDateTimeTextView = findViewById(R.id.rentalStartDateTime)
-        endDateTimeTextView = findViewById(R.id.rentalEndDateTime)
         saveBookingButton = findViewById(R.id.saveButton)
+        viewBookingsButton = findViewById(R.id.viewBookingsButton)
 
-        // Set dynamic date and time
-        dateTimeTextView.text = getCurrentDateTime()
-
-        // Configure location updates
-        createLocationRequest()
-        setupLocationCallback()
-
-        // Add listeners for location input
+        // Location autocomplete for pickup location
         pickupLocationEditText.setOnClickListener { launchAutocomplete(pickupLocationEditText) }
-        dropLocationEditText.setOnClickListener { launchAutocomplete(dropLocationEditText) }
 
-        // Search button functionality
-        fetchLocationButton.setOnClickListener {
-            // Ensure location permission is granted
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                    if (location != null) {
-                        // Use Geocoder to convert latitude and longitude to an address
-                        val geocoder = Geocoder(this)
-                        val addresses: MutableList<Address>? = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                        if (addresses != null) {
-                            if (addresses.isNotEmpty()) {
-                                val address = addresses[0]
-                                // Set the pickup location field with the current location
-                                pickupLocationEditText.setText(address.getAddressLine(0))
-                            }
-                        }
-                    } else {
-                        Toast.makeText(this, "Unable to fetch current location", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } else {
-                // Request location permissions if not granted
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
-            }
-        }
+        // Manual input for drop location
+        dropLocationEditText.hint = "Enter drop location manually"
 
-        // Handle trip type selection
-        val oneWayRadioButton: RadioButton = findViewById(R.id.oneWayRadioButton)
-        val roundTripRadioButton: RadioButton = findViewById(R.id.roundTripRadioButton)
-
-        oneWayRadioButton.setOnClickListener {
-            oneWayRadioButton.isChecked = true
-            roundTripRadioButton.isChecked = false
-        }
-
-        roundTripRadioButton.setOnClickListener {
-            roundTripRadioButton.isChecked = true
-            oneWayRadioButton.isChecked = false
-        }
-
-
-
-        // Tab click listeners
-        setupTabListeners()
-
-        // Date and Time Selectors
+        // DateTime Selector
         startDateTimeTextView.setOnClickListener { selectDateTime(startDateTime, startDateTimeTextView) }
-        endDateTimeTextView.setOnClickListener { selectDateTime(endDateTime, endDateTimeTextView) }
 
         // Save booking
         saveBookingButton.setOnClickListener { saveBookingToDatabase() }
+
+        // View bookings
+        viewBookingsButton.setOnClickListener { fetchAndDisplayBookings() }
+
+        // Handle location permissions
+        checkAndRequestLocationPermissions()
+    }
+
+    private fun checkAndRequestLocationPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            startLocationUpdates()
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun startLocationUpdates() {
+        locationRequest = LocationRequest.create().apply {
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                locationResult.lastLocation?.let { location ->
+                    val geocoder = Geocoder(this@CabActivity, Locale.getDefault())
+                    val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                    val address = addresses?.firstOrNull()?.getAddressLine(0)
+                    pickupLocationEditText.setText(address ?: "Location not found")
+                }
+            }
+        }
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    private fun launchAutocomplete(editText: EditText) {
+        // Autocomplete is removed for drop location
+        val fields = listOf(com.google.android.libraries.places.api.model.Place.Field.ADDRESS)
+        val intent = com.google.android.libraries.places.widget.Autocomplete.IntentBuilder(
+            com.google.android.libraries.places.widget.model.AutocompleteActivityMode.FULLSCREEN,
+            fields
+        ).build(this)
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE && resultCode == RESULT_OK) {
+            val place = com.google.android.libraries.places.widget.Autocomplete.getPlaceFromIntent(data!!)
+            pickupLocationEditText.setText(place.address)
+        }
     }
 
     private fun selectDateTime(calendar: Calendar, display: TextView) {
@@ -153,7 +132,12 @@ class CabActivity : AppCompatActivity() {
             TimePickerDialog(this, { _, hour, minute ->
                 calendar.set(Calendar.HOUR_OF_DAY, hour)
                 calendar.set(Calendar.MINUTE, minute)
-                display.text = SimpleDateFormat("dd MMM, yyyy hh:mm a", Locale.getDefault()).format(calendar.time)
+
+                if (calendar.timeInMillis < System.currentTimeMillis()) {
+                    Toast.makeText(this, "Date and Time cannot be in the past", Toast.LENGTH_SHORT).show()
+                } else {
+                    display.text = SimpleDateFormat("dd MMM, yyyy hh:mm a", Locale.getDefault()).format(calendar.time)
+                }
             }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false).show()
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH)).show()
     }
@@ -162,118 +146,53 @@ class CabActivity : AppCompatActivity() {
         val pickup = pickupLocationEditText.text.toString().trim()
         val drop = dropLocationEditText.text.toString().trim()
         val startDate = startDateTimeTextView.text.toString().trim()
-        val endDate = endDateTimeTextView.text.toString().trim()
 
-        if (pickup.isEmpty() || drop.isEmpty() || startDate == "Select" || endDate == "Select") {
-            Toast.makeText(this, "Please fill all fields before saving.", Toast.LENGTH_SHORT).show()
+        if (pickup.isEmpty() || drop.isEmpty() || startDate.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val bookingDetails = mapOf(
-            "pickupLocation" to pickup,
-            "dropLocation" to drop,
-            "startDateTime" to startDate,
-            "endDateTime" to endDate,
-            "cabType" to selectedCabType,
-            "tripType" to selectedTripType
+        val bookingRef = database.push()
+        val booking = mapOf(
+            "pickup" to pickup,
+            "drop" to drop,
+            "startDate" to startDate
         )
 
-        val databaseReference = FirebaseDatabase.getInstance().getReference("CarBookings")
-        databaseReference.push().setValue(bookingDetails).addOnCompleteListener { task ->
+        bookingRef.setValue(booking).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Toast.makeText(this, "Booking saved successfully.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Booking saved successfully", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Failed to save booking. Please try again.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to save booking", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun createLocationRequest() {
-        locationRequest = LocationRequest.create().apply {
-            interval = 10000 // 10 seconds
-            fastestInterval = 5000 // 5 seconds
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
-    }
+    private fun fetchAndDisplayBookings() {
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val bookings = mutableListOf<String>()
+                for (data in snapshot.children) {
+                    val pickup = data.child("pickup").getValue(String::class.java) ?: "Unknown Pickup"
+                    val drop = data.child("drop").getValue(String::class.java) ?: "Unknown Drop"
+                    val startDate = data.child("startDate").getValue(String::class.java) ?: "Unknown Date/Time"
+                    bookings.add("Pickup: $pickup\nDrop: $drop\nStart: $startDate\n\n")
+                }
 
-    private fun setupLocationCallback() {
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                val location: Location? = locationResult.lastLocation
-                if (location != null) {
-                    updateTripType(location.toString())
+                if (bookings.isEmpty()) {
+                    Toast.makeText(this@CabActivity, "No bookings found", Toast.LENGTH_SHORT).show()
+                } else {
+                    val builder = AlertDialog.Builder(this@CabActivity)
+                    builder.setTitle("Bookings")
+                    builder.setItems(bookings.toTypedArray(), null)
+                    builder.setPositiveButton("OK", null)
+                    builder.show()
                 }
             }
-        }
-    }
 
-    private fun getCurrentDateTime(): String {
-        val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("dd MMM, yyyy hh:mm a", Locale.getDefault())
-        return dateFormat.format(calendar.time)
-    }
-
-    private fun launchAutocomplete(locationEditText: EditText) {
-        val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS)
-        val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields).build(this)
-        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun startLocationUpdates() {
-        if (!hasLocationPermissions()) {
-            requestLocationPermissions()
-            return
-        }
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
-    }
-
-    private fun hasLocationPermissions(): Boolean {
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestLocationPermissions() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            LOCATION_PERMISSION_REQUEST_CODE
-        )
-    }
-
-    override fun onResume() {
-        super.onResume()
-        startLocationUpdates() // Start location updates when the activity is in the foreground
-    }
-
-    override fun onPause() {
-        super.onPause()
-        fusedLocationClient.removeLocationUpdates(locationCallback) // Stop location updates when the activity is not visible
-    }
-
-
-    private fun updateTripType(type: String) {
-        selectedTripType = type
-    }
-
-    private fun setupTabListeners() {
-        outstationCabsTab.setOnClickListener {
-            selectedCabType = "Outstation Cabs"
-            updateTabColors()
-        }
-        airportCabsTab.setOnClickListener {
-            selectedCabType = "Airport Cabs"
-            updateTabColors()
-        }
-        hourlyRentalsTab.setOnClickListener {
-            selectedCabType = "Hourly Rentals"
-            updateTabColors()
-        }
-    }
-
-    private fun updateTabColors() {
-        outstationCabsTab.setBackgroundColor(if (selectedCabType == "Outstation Cabs") getColor(R.color.primaryLightColor) else getColor(R.color.text_primary_dark))
-        airportCabsTab.setBackgroundColor(if (selectedCabType == "Airport Cabs") getColor(R.color.primaryLightColor) else getColor(R.color.text_primary_dark))
-        hourlyRentalsTab.setBackgroundColor(if (selectedCabType == "Hourly Rentals") getColor(R.color.primaryLightColor) else getColor(R.color.text_primary_dark))
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@CabActivity, "Failed to fetch bookings", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

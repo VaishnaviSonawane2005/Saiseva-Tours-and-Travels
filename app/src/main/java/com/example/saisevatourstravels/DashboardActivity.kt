@@ -140,18 +140,18 @@ class DashboardActivity : AppCompatActivity() {
                     Toast.makeText(this, "Home selected", Toast.LENGTH_SHORT).show()
                     true
                 }
-                R.id.nav_activity -> {
-                    // Navigate to BookingDetails
-                    val intent = Intent(this, BookingDetails::class.java)
-                    startActivity(intent)
-                    true
-                }
-//                R.id.nav_services -> {
-//                    // Navigate to Profile Page
-//                    val intent = Intent(this, ProfileActivity::class.java)
+//                R.id.nav_activity -> {
+//                    // Navigate to BookingDetails
+//                    val intent = Intent(this, BookingDetails::class.java)
 //                    startActivity(intent)
 //                    true
 //                }
+                R.id.nav_services -> {
+                    // Navigate to Profile Page
+                    val intent = Intent(this, MainActivity2::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> false
             }
         }
