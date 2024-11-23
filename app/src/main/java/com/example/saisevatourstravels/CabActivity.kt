@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
@@ -14,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.*
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,9 +32,9 @@ class CabActivity : AppCompatActivity() {
 
     private var startDateTime: Calendar = Calendar.getInstance()
     private lateinit var database: DatabaseReference
+    private lateinit var userDatabase: DatabaseReference
 
     companion object {
-        const val AUTOCOMPLETE_REQUEST_CODE = 100
         const val LOCATION_PERMISSION_REQUEST_CODE = 101
     }
 
@@ -44,6 +44,7 @@ class CabActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         database = FirebaseDatabase.getInstance().getReference("bookings")
+        userDatabase = FirebaseDatabase.getInstance().getReference("users")
 
         // Initialize UI components
         pickupLocationEditText = findViewById(R.id.pickupLocation)
@@ -52,20 +53,28 @@ class CabActivity : AppCompatActivity() {
         saveBookingButton = findViewById(R.id.saveButton)
         viewBookingsButton = findViewById(R.id.viewBookingsButton)
 
-        // Location autocomplete for pickup location
-        pickupLocationEditText.setOnClickListener { launchAutocomplete(pickupLocationEditText) }
-
-        // Manual input for drop location
-        dropLocationEditText.hint = "Enter drop location manually"
-
         // DateTime Selector
         startDateTimeTextView.setOnClickListener { selectDateTime(startDateTime, startDateTimeTextView) }
 
         // Save booking
-        saveBookingButton.setOnClickListener { saveBookingToDatabase() }
+        saveBookingButton.setOnClickListener {
+            val userId = getCurrentUserId()
+            if (userId != null) {
+                saveBookingToUserDatabase(userId)
+            } else {
+                Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         // View bookings
-        viewBookingsButton.setOnClickListener { fetchAndDisplayBookings() }
+        viewBookingsButton.setOnClickListener {
+            val userId = getCurrentUserId()
+            if (userId != null) {
+                fetchBookingsForUser(userId)
+            } else {
+                Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         // Handle location permissions
         checkAndRequestLocationPermissions()
@@ -85,6 +94,11 @@ class CabActivity : AppCompatActivity() {
         }
     }
 
+    private fun getCurrentUserId(): String? {
+        val user = FirebaseAuth.getInstance().currentUser
+        return user?.uid
+    }
+
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
         locationRequest = LocationRequest.create().apply {
@@ -97,8 +111,7 @@ class CabActivity : AppCompatActivity() {
             override fun onLocationResult(locationResult: LocationResult) {
                 locationResult.lastLocation?.let { location ->
                     val geocoder = Geocoder(this@CabActivity, Locale.getDefault())
-                    val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                    val address = addresses?.firstOrNull()?.getAddressLine(0)
+                    val address = getAddressFromLocation(geocoder, location.latitude, location.longitude)
                     pickupLocationEditText.setText(address ?: "Location not found")
                 }
             }
@@ -107,21 +120,13 @@ class CabActivity : AppCompatActivity() {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
     }
 
-    private fun launchAutocomplete(editText: EditText) {
-        // Autocomplete is removed for drop location
-        val fields = listOf(com.google.android.libraries.places.api.model.Place.Field.ADDRESS)
-        val intent = com.google.android.libraries.places.widget.Autocomplete.IntentBuilder(
-            com.google.android.libraries.places.widget.model.AutocompleteActivityMode.FULLSCREEN,
-            fields
-        ).build(this)
-        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE && resultCode == RESULT_OK) {
-            val place = com.google.android.libraries.places.widget.Autocomplete.getPlaceFromIntent(data!!)
-            pickupLocationEditText.setText(place.address)
+    private fun getAddressFromLocation(geocoder: Geocoder, latitude: Double, longitude: Double): String? {
+        return try {
+            val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+            addresses?.firstOrNull()?.getAddressLine(0)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 
@@ -142,7 +147,7 @@ class CabActivity : AppCompatActivity() {
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH)).show()
     }
 
-    private fun saveBookingToDatabase() {
+    private fun saveBookingToUserDatabase(userId: String) {
         val pickup = pickupLocationEditText.text.toString().trim()
         val drop = dropLocationEditText.text.toString().trim()
         val startDate = startDateTimeTextView.text.toString().trim()
@@ -152,41 +157,45 @@ class CabActivity : AppCompatActivity() {
             return
         }
 
-        val bookingRef = database.push()
-        val booking = mapOf(
-            "pickup" to pickup,
-            "drop" to drop,
-            "startDate" to startDate
-        )
+        val newBooking = CarBooking(pickup = pickup, drop = drop, startDate = startDate)
+        val bookingId = userDatabase.child(userId).child("bookings").push().key
 
-        bookingRef.setValue(booking).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Toast.makeText(this, "Booking saved successfully", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Failed to save booking", Toast.LENGTH_SHORT).show()
-            }
+        if (bookingId != null) {
+            newBooking.bookingId = bookingId
+            userDatabase.child(userId).child("bookings").child(bookingId).setValue(newBooking)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "Booking saved successfully", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Failed to save booking", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        } else {
+            Toast.makeText(this, "Failed to generate booking ID", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun fetchAndDisplayBookings() {
-        database.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val bookings = mutableListOf<String>()
-                for (data in snapshot.children) {
-                    val pickup = data.child("pickup").getValue(String::class.java) ?: "Unknown Pickup"
-                    val drop = data.child("drop").getValue(String::class.java) ?: "Unknown Drop"
-                    val startDate = data.child("startDate").getValue(String::class.java) ?: "Unknown Date/Time"
-                    bookings.add("Pickup: $pickup\nDrop: $drop\nStart: $startDate\n\n")
-                }
+    private fun fetchBookingsForUser(userId: String) {
+        val userRef = userDatabase.child(userId).child("bookings")
 
-                if (bookings.isEmpty()) {
-                    Toast.makeText(this@CabActivity, "No bookings found", Toast.LENGTH_SHORT).show()
+        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val bookings = snapshot.children.mapNotNull { it.getValue(CarBooking::class.java) }
+                    if (bookings.isNotEmpty()) {
+                        val bookingDetails = bookings.map { booking ->
+                            "Pickup: ${booking.pickup}\nDrop: ${booking.drop}\nStart: ${booking.startDate}\n\n"
+                        }
+                        AlertDialog.Builder(this@CabActivity)
+                            .setTitle("Your Bookings")
+                            .setItems(bookingDetails.toTypedArray(), null)
+                            .setPositiveButton("OK", null)
+                            .show()
+                    } else {
+                        Toast.makeText(this@CabActivity, "No bookings found", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
-                    val builder = AlertDialog.Builder(this@CabActivity)
-                    builder.setTitle("Bookings")
-                    builder.setItems(bookings.toTypedArray(), null)
-                    builder.setPositiveButton("OK", null)
-                    builder.show()
+                    Toast.makeText(this@CabActivity, "No bookings found for this user", Toast.LENGTH_SHORT).show()
                 }
             }
 

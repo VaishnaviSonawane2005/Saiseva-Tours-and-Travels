@@ -2,12 +2,16 @@ package com.example.saisevatourstravels
 
 import com.google.firebase.database.*
 import com.google.firebase.auth.FirebaseAuth
+import okhttp3.Address
 
 data class User(
     var username: String? = "",
     var contact: String? = "",
     var email: String? = "",
-    var password: String? = ""
+    var password: String? = "",
+    var address: String? = "",
+    var profilePic1: String = "",
+    var bookings: MutableList<CarBooking> = mutableListOf() // Mutable list for easy updates
 ) {
     companion object {
         private val database = FirebaseDatabase.getInstance()

@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
+    id("kotlin-kapt")
+
 }
 
 android {
@@ -101,4 +103,6 @@ dependencies {
     testImplementation("org.mockito:mockito-core:4.0.0")  // Mockito for unit testing
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")  // Coroutines dependency for Kotlin
     implementation("com.google.android.material:material:1.9.0")  // Material Components
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+
 }
