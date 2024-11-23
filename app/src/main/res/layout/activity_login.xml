@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
-        android:layout_height="325dp"
+        android:layout_height="300dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:contentDescription="App Logo"
@@ -27,7 +27,7 @@
         android:gravity="center"
         android:text="Welcome back!"
         android:textColor="@color/black"
-        android:textSize="35sp"
+        android:textSize="25sp"
         android:textStyle="bold" />
 
     <!-- Username Input -->
@@ -111,11 +111,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/password_layout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:backgroundTint="@color/colour_nameofapp"
         android:text="LOGIN"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="16sp"
         app:cornerRadius="8dp"
         style="@style/Widget.MaterialComponents.Button"/>
 
@@ -137,7 +137,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/forgotpass"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="or sign in with"
         android:textColor="@color/black" />
 

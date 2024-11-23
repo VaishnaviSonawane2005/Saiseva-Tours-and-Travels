@@ -58,6 +58,7 @@
                     android:layout_height="150dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginTop="12dp"
                     android:backgroundTint="@color/primaryLightColor"
                     android:text="Shirdi to Nashik"
                     android:textColor="@color/black"

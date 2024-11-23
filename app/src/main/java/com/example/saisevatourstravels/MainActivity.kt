@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
-    private val splashTimeout: Long = 8000 // 8 seconds timeout
+    private val splashTimeout: Long = 5000 // 8 seconds timeout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
